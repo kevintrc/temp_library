@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const port = process.env.PORT || 3030
 
 const nav = [
     { link: '/books', name: 'Books' },
@@ -65,4 +66,4 @@ app.get('/addBook', (req, res) => {
 
 
 
-app.listen(3030, () => console.log("running on 3030"))
+app.listen(port, () => console.log(`Running on ${port}`))
