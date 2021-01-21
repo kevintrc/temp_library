@@ -1,5 +1,19 @@
 const express = require('express')
 const app = express()
+
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/Library', {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
+}).then(() => console.log("MongoDB connected")).catch((err) => { })
+mongoose.connection.on("error", err => {
+    console.log(`DB connection error: ${err.message}`);
+});
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json())
 const port = process.env.PORT || 3030
 
 const nav = [
@@ -7,17 +21,19 @@ const nav = [
     { link: '/authors', name: 'Authors' },
     { link: '/signup', name: 'SignUp' },
     { link: '/login', name: 'Login' },
-    { link: '/addBook', name: 'Add Book' }
+    { link: '/admin', name: 'Admin' }
 ]
 
 const booksRouter = require('./src/routes/booksRouter')(nav);
 const authorsRouter = require('./src/routes/authorsRouter')(nav);
+const adminRouter = require('./src/routes/adminRouter')(nav);
 
-
+app.use(express.urlencoded({ extended: true }))
 app.use(express.static('./public'))
 
 app.use('/books', booksRouter)
 app.use('/authors', authorsRouter)
+app.use('/admin', adminRouter)
 
 
 app.set('view engine', 'ejs')
@@ -47,23 +63,14 @@ app.get('/login', (req, res) => {
         })
 })
 
-app.get('/login', (req, res) => {
-    res.render('login',
-        {
-            nav,
-            title: "Login"
-        })
-})
-
-app.get('/addBook', (req, res) => {
-    res.render('addBook',
-        {
-            nav,
-            title: "Add Book"
-        })
-})
+app.get("*", (req, res) => {
+    res.status(400).render("error", {
+        nav,
+        title: "Error 404",
+        error: "Page not found",
+        message: "The page you are trying to access is invalid",
+    });
+});
 
 
-
-
-app.listen(port, () => console.log(`Running on ${port}`))
+app.listen(port, () => console.log(`Running at ${port}`))
