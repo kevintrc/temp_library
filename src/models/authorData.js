@@ -1,14 +1,33 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/Library')
+
 
 const Schema = mongoose.Schema;
 
 const authorSchema = new Schema({
-    nationality: String,
-    name: String,
-    born: Number,
-    image: Buffer,
-    description: String
+    nationality: {
+        trim: true,
+        type: String,
+        required: true
+    },
+    name: {
+        trim: true,
+        type: String,
+        required: true,
+        unique: true
+    },
+    born: {
+        trim: true,
+        type: String,
+        required: true
+    },
+    image: {
+        required: true,
+        type: Buffer,
+    },
+    description: {
+        required: true,
+        type: String
+    }
 })
 
 const authorData = mongoose.model('authordata', authorSchema);

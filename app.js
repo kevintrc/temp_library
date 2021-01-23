@@ -7,10 +7,7 @@ mongoose.connect('mongodb://localhost:27017/Library', {
     useCreateIndex: true,
     useUnifiedTopology: true,
     useFindAndModify: false
-}).then(() => console.log("MongoDB connected")).catch((err) => { })
-mongoose.connection.on("error", err => {
-    console.log(`DB connection error: ${err.message}`);
-});
+}).then(() => console.log("MongoDB connected")).catch((err) => { console.log(err); })
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
@@ -27,6 +24,7 @@ const nav = [
 const booksRouter = require('./src/routes/booksRouter')(nav);
 const authorsRouter = require('./src/routes/authorsRouter')(nav);
 const adminRouter = require('./src/routes/adminRouter')(nav);
+const userRouter = require('./src/routes/userRouter')(nav);
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static('./public'))
@@ -34,6 +32,7 @@ app.use(express.static('./public'))
 app.use('/books', booksRouter)
 app.use('/authors', authorsRouter)
 app.use('/admin', adminRouter)
+app.use('/user', userRouter)
 
 
 app.set('view engine', 'ejs')

@@ -39,6 +39,7 @@
                         </li>
                         <%}%>
                 </ul>
+
             </nav>
         </div>
     </header>
@@ -56,10 +57,8 @@
                     <div class="well well-lg">
                         <div class="row">
                             <div class="col-sm-12">
-                                <!-- adsfsfsfsaf
-                                sadsdsdsdsdsdsds
-                                <br>
-                                <button style="color: black;">Logout</button> -->
+
+
                             </div>
                         </div>
                     </div>
@@ -86,31 +85,67 @@
                 <div class="panel">
                     <div class="panel-body">
 
+
                         <div class="row">
                             <br>
                             <div class="col-md-2 col-sm-3 text-center">
+                                <img alt=""
+                                    src="data:image/png;base64,<%=new Buffer(book.image.buffer).toString('base64')%>"
+                                    style="width:100px;height:100px" class="img-circle">
                             </div>
-                            <div class="col-md-10 col-sm-9">
-                                <h3>Welcome</h3>
-                                <div class="row">
-                                    <div class="col-xs-9">
-                                        <h4>Welcome to the world of Books and Authors </h4>
-                                    </div>
-                                    <div class="col-xs-3"></div>
-                                </div>
-                                <br><br>
-                            </div>
-                        </div>
-                        <hr>
+                            <form action="../../admin/<%=book._id%>/bookedit" method="POST"
+                                enctype="multipart/form-data">
+                                <div class="col-md-10 col-sm-9">
+                                    <h3>
+                                        <input style="background: transparent;border: none;height: 100%;width: 100%;"
+                                            value="<%=book.title%>" name="title">
+                                    </h3>
+                                    <div class="row">
+                                        <div class="col-xs-9">
+                                            <h4><span class="label label-default">
+                                                    <input style="background: transparent;border: none;"
+                                                        value="<%=book.author%>" name="author">
+                                                </span></h4>
+                                            <h4>
+                                                <small style="font-family:courier,'new courier';" class="text-muted">
+                                                    <input style="background: transparent;border: none;"
+                                                        value="<%=book.genre%>" name="genre">
 
+                                                    <hr>
+                                                    <p class="text-muted">
+                                                        <textarea name="description"
+                                                            style="background: transparent;border: none; width: 100%; resize: none;"
+                                                            rows='15'><%=book.description%></textarea>
+                                                    </p>
+                                                </small>
+                                            </h4>
+                                            <input type="file" id="myfile" name="avatar" accept="image/*">
+                                            <button type="submit"
+                                                class="btn btn-success btn-lg btn-block">UPDATE</button>
+                                        </div>
+                            </form>
+                            <div class="col-xs-9" style="margin-top: 7px;">
+                                <form action="../../admin/<%=book._id%>/bookdelete" method="POST">
+                                    <button type="submit" class="btn btn-danger btn-lg btn-block">DELETE
+                                        ITEM</button>
+                                </form>
+                            </div>
+                            <div class="col-xs-3"></div>
+                        </div>
+                        <br><br>
                     </div>
                 </div>
-
+                <hr>
 
 
             </div>
-            <!--/col-12-->
         </div>
+
+
+
+    </div>
+    <!--/col-12-->
+    </div>
     </div>
 
 

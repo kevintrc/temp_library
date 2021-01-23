@@ -40,6 +40,23 @@ function router(nav) {
 
     })
 
+    authorsRouter.get('/:id/authoreditor', (req, res) => {
+        authorData.findById(req.params.id).then((author) => {
+            res.render('authoreditor',
+                {
+                    nav,
+                    title: "EDITOR",
+                    author
+                })
+        }).catch((err) => res.render("error", {
+            nav,
+            title: "Error 500",
+            error: "Internal Server Error",
+            message: err
+        }))
+
+    })
+
     authorsRouter.get("*", (req, res) => {
         res.status(400).render("error", {
             nav,

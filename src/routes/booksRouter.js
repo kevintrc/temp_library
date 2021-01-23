@@ -39,9 +39,9 @@ function router(nav) {
         }))
 
     })
-    booksRouter.get('/:id/editor', (req, res) => {
+    booksRouter.get('/:id/bookeditor', (req, res) => {
         bookData.findById(req.params.id).then((book) => {
-            res.render('editor',
+            res.render('bookeditor',
                 {
                     nav,
                     title: "EDITOR",
