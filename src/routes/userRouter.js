@@ -1,6 +1,5 @@
 const express = require('express');
 const userData = require('../models/userData');
-const auth = require('../middlewares/auth');
 
 const userRouter = express.Router()
 
@@ -20,17 +19,15 @@ function router(nav) {
             error: "Email already exists, Please login",
             message: err
         }))
-        const token = await user.generateAuthToken()
-        res.send({ user, token })
+        return res.redirect('/admin')
 
     })
 
-    userRouter.post("/login", auth, async (req, res) => {
+    userRouter.post("/login", async (req, res) => {
         try
         {
             const user = await userData.findByCredentials(req.body.email, req.body.password)
-            const token = await user.generateAuthToken()
-            res.send({ user, token })
+            return res.redirect('/admin')
         } catch (err)
         {
             res.status(400).render("error", {

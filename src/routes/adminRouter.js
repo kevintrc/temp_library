@@ -12,7 +12,7 @@ function router(nav) {
         res.render('admin',
             {
                 nav,
-                title: "Admin"      
+                title: "Admin"
             })
     })
 
@@ -43,20 +43,13 @@ function router(nav) {
             description: req.body.description
         }
         const book = bookData(items)
-        book.save().then(() => res.redirect('/books')).catch((err) => {
-            if (err.code === 11000) return res.status(409).render("error", {
-                nav,
-                title: "Error 409 CONFLICT",
-                error: "Book ' " + items.title + " ' already exists",
-                message: err
-            })
-            return res.status(500).render("error", {
-                nav,
-                title: "Error 500",
-                error: "Internal Server Error",
-                message: err
-            })
+        book.save().then(() => res.redirect('/books')).catch((err) => res.status(500).render("error", {
+            nav,
+            title: "Error 500",
+            error: "Internal Server Error",
+            message: err
         })
+        )
     })
     adminRouter.post('/addauthor', upload.single('avatar'), async (req, res) => {
         const buffer = await sharp(req.file.buffer)
@@ -88,25 +81,7 @@ function router(nav) {
         })
     })
 
-    adminRouter.post("/:id/bookedit", upload.single('avatar'), async (req, res) => {
-        var items = {
-            title: req.body.title,
-            genre: req.body.genre,
-            author: req.body.author,
-            description: req.body.description,
-        }
-        if (req.file)
-        {
-            const buffer = await sharp(req.file.buffer)
-                .rotate()
-                .resize({ width: 250, height: 250 })
-                .png()
-                .toBuffer();
-            items.image = buffer;
-        }
-        await bookData.findByIdAndUpdate(req.params.id, items);
-        return res.redirect('/books')
-    })
+
     adminRouter.post("/:id/bookedit", upload.single('avatar'), async (req, res) => {
         var items = {
             title: req.body.title,
@@ -148,7 +123,20 @@ function router(nav) {
                 .toBuffer();
             items.image = buffer;
         }
-        await authorData.findByIdAndUpdate(req.params.id, items);
+        await authorData.findByIdAndUpdate(req.params.id, items).catch((err) => {
+            if (err.code === 11000) return res.status(409).render("error", {
+                nav,
+                title: "Error 409 CONFLICT",
+                error: "Author ' " + items.name + " ' already exists",
+                message: err
+            })
+            return res.status(500).render("error", {
+                nav,
+                title: "Error 500",
+                error: "Internal Server Error",
+                message: err
+            })
+        });
         return res.redirect('/authors')
     })
 

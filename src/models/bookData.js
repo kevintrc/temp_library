@@ -5,9 +5,9 @@ const Schema = mongoose.Schema;
 
 const booksSchema = new Schema({
     title: {
+        trim: true,
         type: String,
         required: true,
-        trim: true,
         unique: true
     },
     genre: {

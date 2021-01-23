@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/Library', {
+mongoose.connect('mongodb+srv://userone:userone@libfiles.tncad.mongodb.net/LIBRARYFSD?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
@@ -14,16 +14,16 @@ app.use(express.json())
 const port = process.env.PORT || 3030
 
 const nav = [
+    { link: '/', name: 'Home' },
     { link: '/books', name: 'Books' },
     { link: '/authors', name: 'Authors' },
     { link: '/signup', name: 'SignUp' },
-    { link: '/login', name: 'Login' },
-    { link: '/admin', name: 'Admin' }
+    { link: '/login', name: 'Admin' },
 ]
 
 const booksRouter = require('./src/routes/booksRouter')(nav);
 const authorsRouter = require('./src/routes/authorsRouter')(nav);
-const adminRouter = require('./src/routes/adminRouter')(nav);
+const adminRouter = require('./src/routes/adminRouter')([{ link: '/', name: 'Back' }]);
 const userRouter = require('./src/routes/userRouter')(nav);
 
 app.use(express.urlencoded({ extended: true }))
